@@ -61,3 +61,9 @@ This GWAS analysis involves the following key steps:
 5. ** Convert emmax result to plink format
    - Generate QQplot and Manhattan plot
 
+6. Run Snakemake:
+	Execute the Snakemake pipeline to perform the 
+	
+		snakemake --cores <num_cores> all
+
+	Replace <num_cores> with the desired number of cores for parallel execution.
