@@ -1,9 +1,9 @@
-# Genome-Wide Association Study (GWAS) Analysis with EMMAX
+### Genome-Wide Association Study (GWAS) Analysis with EMMAX
 
 Welcome to the GWAS analysis repository! This project utilizes the EMMAX software to conduct a genome-wide association study, aiming to identify genetic variants associated with 
 phenotypic traits of interest.
 
-## Overview
+#### Overview
 
 EMMAX is a statistical test designed for large-scale human or model organism association mapping, accounting for sample structure. It takes advantage of the computational efficiency 
 obtained by the EMMA algorithm and exploits the fact that each locus explains only a small fraction of complex traits. This unique feature allows EMMAX to avoid repetitive variance 
