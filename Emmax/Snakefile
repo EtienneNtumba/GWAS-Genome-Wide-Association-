@@ -1,0 +1,52 @@
+rule all:
+	input:
+		summary = 'sum.txt'
+rule covariates:
+	input: 
+		expand('data/TZ.HbF.phased.3.{suffix}',suffix = ['bim','bed','fam'])
+	params:
+		amr = 'data/TZ.HbF.phased.3'
+	output:
+		expand('test.{plinks}',plinks = ['bim','bed','fam']),
+		expand('test_tr.{sample}',sample = ['tfam','tped','covs'])
+	shell:
+		"""
+		module load plink
+		plink --bfile {params.amr} --maf 0.01 --geno 0.05 --recode12 --make-bed --out test
+		plink --bfile test --recode12 --output-missing-genotype 0 --transpose --out test_tr
+		awk '{{print $1"\t"$2"\t"$NF}}' test_tr.tfam > test_tr.covs
+		"""
+rule emmax:
+	input:               	
+		tpeds ='test_tr.tped',
+		tfams = 'test_tr.tfam',
+		tcov = 'test_tr.covs'
+	params:
+		Test = 'test_tr'
+	output:
+		kin = 'test_tr.aBN.kinf',
+		rml = 'result.reml',
+		ps = 'result.ps'
+	shell:
+		"""
+		module load emmax
+		./emmax-kin-intel64 -v -d 10 test_tr 
+		./emmax-intel64 -v -d 10 -t {params.Test} -p {input.tcov} -k test_tr.aBN.kinf -o result	
+		"""
+rule convertemmaxtoplink:
+	input:
+		data = expand('test.{plinks}',plinks = ['bim','bed','fam']),
+		emx = 'result.ps',
+		bim = 'test.bim'
+	params:
+		freqs = 'test'	
+	output:
+		summary = 'sum.txt'		
+	shell:
+		"""
+		module load plink
+		module load python
+
+		plink --bfile {params.freqs} --freq --out tests
+		python convplink-emm.py tests.frq {input.emx} {input.bim} sum.txt
+		"""		
