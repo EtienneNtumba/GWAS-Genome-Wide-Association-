@@ -47,7 +47,7 @@ Commands:
 bash
 
 ### Filter individuals with high missingness
-plink --bfile input_data --mind 0.02 --make-bed --out data_mind
+´plink --bfile input_data --mind 0.02 --make-bed --out data_mind
 
 ### Filter SNPs with high missingness
 plink --bfile data_mind --geno 0.02 --make-bed --out data_geno
